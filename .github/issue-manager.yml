@@ -1,0 +1,121 @@
+# Sample YAML configuration for the issue-manager action
+# TODO
+# - if an issue is closed and re-opened, need to delete all previous labels and set to needs-triage
+# - need a condition for open PR
+states:
+  - label: needs-triage
+    description: 'Issue is pending review and triage by maintainers'
+    transitions:
+      - description: 'Transition to needs-info if more information is requested'
+        conditions:
+          - type: command
+            command: needs-info
+        actions:
+          - type: replace-label
+            label: needs-info
+          - type: post-comment
+            comment: 'We need more information to proceed with this issue.'
+
+  - label: needs-info
+    description: 'Waiting for additional information from OP or non-maintainer'
+    transitions:
+      - description: 'Go back to triage on activity'
+        conditions:
+          - type: activity
+        actions:
+          - type: replace-label
+            label: needs-triage
+          - type: remove-label
+            label: stale
+          - type: post-comment
+            comment: 'This issue is returned for triage.'
+      - description: 'Mark issue as stale after timeout'
+        conditions:
+          - type: timeout
+            timeout: 30 # days
+        actions:
+          - type: add-label
+            label: stale
+          - type: post-comment
+            comment: 'This issue has been marked stale due to inactivity.'
+      - description: 'Close if stale for too long'
+        conditions:
+          - type: label
+            label: stale
+          - type: timeout
+            timeout: 30 # additional days
+        actions:
+          - type: post-comment
+            comment: 'This issue has been closed due to inactivity.'
+
+  - label: help-wanted
+    description: 'Issue is accepted, waiting for volunteers to pick up'
+    transitions:
+      - description: 'Move into in-progress state'
+        conditions:
+          - type: command
+            command: /in-progress
+        actions:
+          - type: replace-label
+            label: in-progress
+      - description: 'Mark as stale after a timeout if nobody picks it up'
+        conditions:
+          - type: timeout
+            timeout: 90 # days
+        actions:
+          - type: add-label
+            label: stale
+          - type: post-comment
+            comment: 'This issue has been marked stale due to inactivity.'
+      - description: 'Remove stale on activity'
+        conditions:
+          - type: activity
+        actions:
+          - type: remove-label
+            label: stale
+      - description: 'Close if stale for too long and still nobody picks it up'
+        conditions:
+          - type: label
+            label: stale
+          - type: timeout
+            timeout: 90 # additional days
+        actions:
+          - type: post-comment
+            comment:
+              'No volunteers claimed this issue. It has been closed due to
+              inactivity.'
+
+  - name: in-progress
+    label: in-progress
+    transitions:
+      - description:
+          'Mark as stale after a timeout, then move back to help-wanted if still
+          stale'
+        conditions:
+          - type: timeout
+            timeout: 30 # days
+        actions:
+          - type: add-label
+            label: stale
+          - type: post-comment
+            comment: 'This issue has been marked stale due to inactivity.'
+      - description: 'Remove stale on activity'
+        conditions:
+          - type: activity
+        actions:
+          - type: remove-label
+            label: stale
+      - description: 'Move back to help-wanted if stale for too long'
+        conditions:
+          - type: label
+            label: stale
+          - type: timeout
+            timeout: 30 # additional days
+        actions:
+          - type: replace-label
+            label: help-wanted
+          - type: remove-label
+            label: stale
+          - type: postComment
+            comment:
+              'This issue is now back in the help-wanted pool due to inactivity.'
