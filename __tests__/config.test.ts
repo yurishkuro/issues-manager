@@ -32,10 +32,17 @@ describe('loadConfig', () => {
     ]
   }
 
+  let readFileSyncMock: jest.Mock
+  let yamlLoadMock: jest.Mock
+
   beforeEach(() => {
     jest.resetAllMocks()
-    ;(fs.readFileSync as jest.Mock).mockReturnValue('mock file content')
-    ;(yaml.load as jest.Mock).mockReturnValue(mockYamlData)
+
+    readFileSyncMock = fs.readFileSync as jest.Mock
+    readFileSyncMock.mockReturnValue('mock file content')
+
+    yamlLoadMock = yaml.load as jest.Mock
+    yamlLoadMock.mockReturnValue(mockYamlData)
   })
 
   it('should load and parse a YAML file correctly', () => {
@@ -46,21 +53,21 @@ describe('loadConfig', () => {
   })
 
   it('should throw error if the file cannot be read', () => {
-    ;(fs.readFileSync as jest.Mock).mockImplementation(() => {
+    readFileSyncMock.mockImplementation(() => {
       throw new Error('File read error')
     })
     expect(() => loadConfig('test.yml')).toThrow('File read error')
   })
 
   it('should throw error if the YAML is invalid', () => {
-    ;(yaml.load as jest.Mock).mockImplementation(() => {
+    yamlLoadMock.mockImplementation(() => {
       throw new Error('YAML parse error')
     })
     expect(() => loadConfig('test.yml')).toThrow('YAML parse error')
   })
 
   it('should throw error if the YAML is valid but does not match the schema', () => {
-    ;(yaml.load as jest.Mock).mockReturnValue({})
+    yamlLoadMock.mockReturnValue({})
     expect(() => loadConfig('test.yml')).toThrow(
       `must have required property 'states'`
     )
