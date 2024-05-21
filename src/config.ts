@@ -5,6 +5,7 @@ import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 import Ajv, { JSONSchemaType } from 'ajv'
 // import addFormats from 'ajv-formats';
+import schemaJson from './config-schema.json' // assert { type: 'json' }
 
 export interface State {
   description: string
@@ -44,12 +45,12 @@ export function loadConfig(fileName: string): StateMachineConfig {
   const data = fs.readFileSync(fileName, 'utf8')
   const doc = yaml.load(data)
   const ajv = new Ajv()
-  // addFormats(ajv);
-  const schema: JSONSchemaType<StateMachineConfig> = require('./config-schema.json')
+  // addFormats(ajv)
+  const schema = schemaJson as unknown as JSONSchemaType<StateMachineConfig>
   const validate = ajv.compile(schema)
   if (validate(doc)) {
-    return doc as StateMachineConfig
+    return doc
   }
-  const errorMessages = validate.errors?.map((error: any) => error.message)
+  const errorMessages = validate.errors?.map(e => e.message)
   throw new Error(errorMessages?.join('\n'))
 }
