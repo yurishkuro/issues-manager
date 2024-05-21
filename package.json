@@ -34,7 +34,7 @@
     "package:watch": "npm run package -- --watch",
     "test": "npx jest",
     "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package",
-    "generate-schema": "ts-json-schema-generator -p src/config.ts -t StateMachineConfig -o schema/StateMachineConfig-schema.json"
+    "generate:schema": "ts-json-schema-generator -p src/config.ts -t StateMachineConfig -o src/config-schema.json"
   },
   "license": "MIT",
   "jest": {
