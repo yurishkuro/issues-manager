@@ -21,9 +21,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "type": "object"
     },
     "Condition": {
@@ -39,18 +37,11 @@
           "type": "number"
         },
         "type": {
-          "enum": [
-            "label",
-            "timeout",
-            "activity",
-            "pull-request"
-          ],
+          "enum": ["label", "timeout", "activity", "pull-request"],
           "type": "string"
         }
       },
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "type": "object"
     },
     "State": {
@@ -69,11 +60,7 @@
           "type": "array"
         }
       },
-      "required": [
-        "description",
-        "label",
-        "transitions"
-      ],
+      "required": ["description", "label", "transitions"],
       "type": "object"
     },
     "StateMachineConfig": {
@@ -86,9 +73,7 @@
           "type": "array"
         }
       },
-      "required": [
-        "states"
-      ],
+      "required": ["states"],
       "type": "object"
     },
     "Transition": {
@@ -110,9 +95,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "description"
-      ],
+      "required": ["description"],
       "type": "object"
     }
   }

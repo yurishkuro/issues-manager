@@ -1,9 +1,9 @@
 /**
  * Defines the structure for the state machine configuration.
  */
-import * as yaml from 'js-yaml';
-import * as fs from 'fs';
-import Ajv, { JSONSchemaType } from 'ajv';
+import * as yaml from 'js-yaml'
+import * as fs from 'fs'
+import Ajv, { JSONSchemaType } from 'ajv'
 // import addFormats from 'ajv-formats';
 
 export interface State {
@@ -41,15 +41,15 @@ export interface StateMachineConfig {
  * @returns The parsed and validated StateMachineConfig object.
  */
 export function loadConfig(fileName: string): StateMachineConfig {
-  const data = fs.readFileSync(fileName, 'utf8');
-  const doc = yaml.load(data);
-  const ajv = new Ajv();
+  const data = fs.readFileSync(fileName, 'utf8')
+  const doc = yaml.load(data)
+  const ajv = new Ajv()
   // addFormats(ajv);
-  const schema: JSONSchemaType<StateMachineConfig> = require('./config-schema.json');
-  const validate = ajv.compile(schema);
+  const schema: JSONSchemaType<StateMachineConfig> = require('./config-schema.json')
+  const validate = ajv.compile(schema)
   if (validate(doc)) {
-    return doc as StateMachineConfig;
+    return doc as StateMachineConfig
   }
-  const errorMessages = validate.errors?.map((error: any) => error.message);
-  throw new Error(errorMessages?.join('\n'));
+  const errorMessages = validate.errors?.map((error: any) => error.message)
+  throw new Error(errorMessages?.join('\n'))
 }
