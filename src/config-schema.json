@@ -1,0 +1,102 @@
+{
+  "$ref": "#/definitions/StateMachineConfig",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Action": {
+      "additionalProperties": false,
+      "properties": {
+        "comment": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "add-label",
+            "replace-label",
+            "remove-label",
+            "post-comment"
+          ],
+          "type": "string"
+        }
+      },
+      "required": ["type"],
+      "type": "object"
+    },
+    "Condition": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "linked": {
+          "type": "boolean"
+        },
+        "timeout": {
+          "type": "number"
+        },
+        "type": {
+          "enum": ["label", "timeout", "activity", "pull-request"],
+          "type": "string"
+        }
+      },
+      "required": ["type"],
+      "type": "object"
+    },
+    "State": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "transitions": {
+          "items": {
+            "$ref": "#/definitions/Transition"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["description", "label", "transitions"],
+      "type": "object"
+    },
+    "StateMachineConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "states": {
+          "items": {
+            "$ref": "#/definitions/State"
+          },
+          "type": "array"
+        }
+      },
+      "required": ["states"],
+      "type": "object"
+    },
+    "Transition": {
+      "additionalProperties": false,
+      "properties": {
+        "actions": {
+          "items": {
+            "$ref": "#/definitions/Action"
+          },
+          "type": "array"
+        },
+        "conditions": {
+          "items": {
+            "$ref": "#/definitions/Condition"
+          },
+          "type": "array"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": ["description"],
+      "type": "object"
+    }
+  }
+}
