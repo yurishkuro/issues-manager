@@ -49,6 +49,7 @@
     },
     "State": {
       "additionalProperties": false,
+      "description": "Defines the structure for the state machine configuration.",
       "properties": {
         "description": {
           "type": "string"
