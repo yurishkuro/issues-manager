@@ -2,64 +2,65 @@ import { Action, Condition, StateMachineConfig } from './config'
 import { loadConfig } from './load-config'
 import wordwrap from 'wordwrap'
 
-/**
- * Parses a YAML file using the loadConfig method and transforms the data model into a Mermaid markup syntax state diagram.
- * @param fileName The name of the YAML file to parse.
- */
-function parseYamlToMermaid(fileName: string): void {
-  function wrap(s: string): string {
-    const lines = wordwrap(20)(s)
-    return lines.replace(/\n/g, '\\n')
-  }
-  function renderConditions(conditions: Condition[]): string {
-    return conditions
-      .map(condition => {
-        switch (condition.type) {
-          case 'label':
-            return `- label=${condition.label}`
-          case 'timeout':
-            return `- timeout=${condition.timeout}d`
-          case 'activity':
-            return `- activity`
-          case 'pull-request':
-            return `- pull-request`
-          case 'command':
-            return `- command=${condition.command}`
-        }
-      })
-      .join('\\n')
-  }
-  function renderActions(actions: Action[]): string {
-    return actions
-      .map(action => {
-        switch (action.type) {
-          case 'add-label':
-            return `- add-label=${action.label}`
-          case 'replace-label':
-            return `- replace-label=${action.label}`
-          case 'remove-label':
-            return `- remove-label=${action.label}`
-          case 'post-comment':
-            return `- post-comment`
-          case 'close':
-            return `- close`
-        }
-      })
-      .join('\\n')
-  }
+function wrap(s: string): string {
+  const lines = wordwrap(20)(s)
+  return lines.replace(/\n/g, '\\n')
+}
+function renderConditions(conditions: Condition[]): string {
+  return conditions
+    .map(condition => {
+      switch (condition.type) {
+        case 'label':
+          return `- label=${condition.label}`
+        case 'timeout':
+          return `- timeout=${condition.timeout}d`
+        case 'activity':
+          return `- activity`
+        case 'pull-request':
+          return `- pull-request`
+        case 'command':
+          return `- command=${condition.command}`
+      }
+    })
+    .join('\\n')
+}
+function renderActions(actions: Action[]): string {
+  return actions
+    .map(action => {
+      switch (action.type) {
+        case 'add-label':
+          return `- add-label=${action.label}`
+        case 'replace-label':
+          return `- replace-label=${action.label}`
+        case 'remove-label':
+          return `- remove-label=${action.label}`
+        case 'post-comment':
+          return `- post-comment`
+        case 'close':
+          return `- close`
+      }
+    })
+    .join('\\n')
+}
 
-  const config: StateMachineConfig = loadConfig(fileName)
+/**
+ * Transforms the config data model into a Mermaid markup syntax state diagram.
+ * @param config state machine config
+ */
+function configToMermaid(config: StateMachineConfig): string {
   let mermaidDiagram = 'stateDiagram-v2\n    direction LR\n'
   mermaidDiagram += `    classDef transition fill:white\n`
 
-  config.states.forEach((state, index) => {
-    const stateId = `s${index + 1}`
+  for (let i = 0; i < config.states.length; i++) {
+    const state = config.states[i]
+    const stateId = `s${i + 1}`
     mermaidDiagram += `    ${stateId} : ${state.label}\\n\\n${wrap(state.description)}\n`
-    if (index === 0) {
+    if (i === 0) {
       mermaidDiagram += `    [*] --> ${stateId}\n`
     }
 
-    state.transitions.forEach((transition, tIndex) => {
+    for (let tIndex = 0; tIndex < state.transitions.length; tIndex++) {
+      const transition = state.transitions[tIndex]
       const targetState = config.states.find(
         s =>
           s.label ===
@@ -76,17 +77,17 @@ function parseYamlToMermaid(fileName: string): void {
       mermaidDiagram += `    class ${choiceId} transition\n`
       mermaidDiagram += `    ${stateId} --> ${choiceId}\n`
       mermaidDiagram += `    ${choiceId} --> ${targetStateId}\n`
-    })
-  })
-
-  console.log(mermaidDiagram)
+    }
+  }
+  return mermaidDiagram
 }
 
-// Example usage
 const fileName = process.argv[2]
 if (!fileName) {
   console.error('Please provide a YAML file name as an argument.')
   process.exit(1)
 }
 
-parseYamlToMermaid(fileName)
+const config: StateMachineConfig = loadConfig(fileName)
+const mermaidDiagram = configToMermaid(config)
+console.log(mermaidDiagram)
