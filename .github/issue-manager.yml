@@ -23,7 +23,9 @@ states:
           - type: replace-label
             label: help-wanted
           - type: post-comment
-            comment: 'This issue has been accepted and added to the backlog, waiting for a volunteer.'
+            comment:
+              'This issue has been accepted and added to the backlog, waiting
+              for a volunteer.'
 
   - label: needs-info
     description: 'Waiting for additional information from OP or non-maintainer'

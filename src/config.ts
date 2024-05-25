@@ -22,7 +22,12 @@ export interface Condition {
 }
 
 export interface Action {
-  type: 'add-label' | 'replace-label' | 'remove-label' | 'post-comment' | 'close'
+  type:
+    | 'add-label'
+    | 'replace-label'
+    | 'remove-label'
+    | 'post-comment'
+    | 'close'
   label?: string
   comment?: string
 }
