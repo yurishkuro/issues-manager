@@ -9,8 +9,8 @@ export interface State {
 
 export interface Transition {
   description: string
-  conditions?: Condition[]
-  actions?: Action[]
+  conditions: Condition[]
+  actions: Action[]
 }
 
 export interface Condition {
@@ -22,7 +22,12 @@ export interface Condition {
 }
 
 export interface Action {
-  type: 'add-label' | 'replace-label' | 'remove-label' | 'post-comment'
+  type:
+    | 'add-label'
+    | 'replace-label'
+    | 'remove-label'
+    | 'post-comment'
+    | 'close'
   label?: string
   comment?: string
 }

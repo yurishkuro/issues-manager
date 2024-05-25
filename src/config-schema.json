@@ -16,7 +16,8 @@
             "add-label",
             "replace-label",
             "remove-label",
-            "post-comment"
+            "post-comment",
+            "close"
           ],
           "type": "string"
         }
@@ -99,7 +100,7 @@
           "type": "string"
         }
       },
-      "required": ["description"],
+      "required": ["description", "conditions", "actions"],
       "type": "object"
     }
   }
