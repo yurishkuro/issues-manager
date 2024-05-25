@@ -27,6 +27,9 @@
     "Condition": {
       "additionalProperties": false,
       "properties": {
+        "command": {
+          "type": "string"
+        },
         "label": {
           "type": "string"
         },
@@ -37,7 +40,7 @@
           "type": "number"
         },
         "type": {
-          "enum": ["label", "timeout", "activity", "pull-request"],
+          "enum": ["label", "timeout", "activity", "pull-request", "command"],
           "type": "string"
         }
       },

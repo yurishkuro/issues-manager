@@ -34,7 +34,7 @@
     "package:watch": "npm run package -- --watch",
     "test": "npx jest",
     "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package",
-    "generate:schema": "ts-json-schema-generator -p src/config.ts -t StateMachineConfig -o src/config-schema.json"
+    "generate:schema": "ts-json-schema-generator -p src/config.ts -t StateMachineConfig -o src/config-schema.json && npx prettier --write src/config-schema.json"
   },
   "license": "MIT",
   "jest": {
@@ -90,6 +90,7 @@
     "prettier": "^3.2.5",
     "prettier-eslint": "^16.3.0",
     "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }
 }

@@ -85,8 +85,8 @@ states:
               'No volunteers claimed this issue. It has been closed due to
               inactivity.'
 
-  - name: in-progress
-    label: in-progress
+  - label: in-progress
+    description: 'Issue is being worked on by a volunteer'
     transitions:
       - description:
           'Mark as stale after a timeout, then move back to help-wanted if still
@@ -116,6 +116,6 @@ states:
             label: help-wanted
           - type: remove-label
             label: stale
-          - type: postComment
+          - type: post-comment
             comment:
               'This issue is now back in the help-wanted pool due to inactivity.'
