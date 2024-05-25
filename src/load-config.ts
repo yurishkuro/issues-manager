@@ -2,7 +2,7 @@ import * as yaml from 'js-yaml'
 import * as fs from 'fs'
 import Ajv, { JSONSchemaType } from 'ajv'
 import schemaJson from './config-schema.json' // assert { type: 'json' }
-import {StateMachineConfig} from './config'
+import { StateMachineConfig } from './config'
 
 /**
  * Loads a YAML file, parses it, validates it against the generated JSON Schema, and returns a StateMachineConfig object.
@@ -18,6 +18,8 @@ export function loadConfig(fileName: string): StateMachineConfig {
   if (validate(doc)) {
     return doc
   }
-  const errorMessages = validate.errors?.map(e => `${e.message}: ${JSON.stringify(e)}`)
+  const errorMessages = validate.errors?.map(
+    e => `${e.message}: ${JSON.stringify(e)}`
+  )
   throw new Error(errorMessages?.join('\n'))
 }
