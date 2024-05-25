@@ -15,6 +15,15 @@ states:
             label: needs-info
           - type: post-comment
             comment: 'We need more information to proceed with this issue.'
+      - description: 'Transition to help-wanted if issue is accepted'
+        conditions:
+          - type: command
+            command: help-wanted
+        actions:
+          - type: replace-label
+            label: help-wanted
+          - type: post-comment
+            comment: 'This issue has been accepted and added to the backlog, waiting for a volunteer.'
 
   - label: needs-info
     description: 'Waiting for additional information from OP or non-maintainer'
@@ -47,9 +56,10 @@ states:
         actions:
           - type: post-comment
             comment: 'This issue has been closed due to inactivity.'
+          - type: close
 
   - label: help-wanted
-    description: 'Issue is accepted, waiting for volunteers to pick up'
+    description: 'Issue is accepted, waiting for a volunteer'
     transitions:
       - description: 'Move into in-progress state'
         conditions:
@@ -84,6 +94,7 @@ states:
             comment:
               'No volunteers claimed this issue. It has been closed due to
               inactivity.'
+          - type: close
 
   - label: in-progress
     description: 'Issue is being worked on by a volunteer'
