@@ -14,12 +14,10 @@ function renderConditions(conditions: Condition[]): string {
           return `- label=${condition.label}`
         case 'timeout':
           return `- timeout=${condition.timeout}d`
-        case 'activity':
-          return `- activity`
-        case 'pull-request':
-          return `- pull-request`
         case 'command':
           return `- command=${condition.command}`
+        default:
+          return `- ${condition.type}`
       }
     })
     .join('\\n')
@@ -34,10 +32,8 @@ function renderActions(actions: Action[]): string {
           return `- replace-label=${action.label}`
         case 'remove-label':
           return `- remove-label=${action.label}`
-        case 'post-comment':
-          return `- post-comment`
-        case 'close':
-          return `- close`
+        default:
+          return `- ${action.type}`
       }
     })
     .join('\\n')
