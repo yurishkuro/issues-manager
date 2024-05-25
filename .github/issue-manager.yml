@@ -1,4 +1,7 @@
 # Sample YAML configuration for the issue-manager action
+#
+# See overview of this workflow in ../issue-manager.md
+#
 # TODO
 # - if an issue is closed and re-opened, need to delete all previous labels and set to needs-triage
 # - need a condition for open PR
