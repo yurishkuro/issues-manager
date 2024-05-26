@@ -44,6 +44,11 @@ jobs:
         id: npm-ci-test
         run: npm run ci-test
 
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: 3fd51631-9221-4998-8aea-0db320adb4de
+
   test-action:
     name: GitHub Actions Test
     runs-on: ubuntu-latest
